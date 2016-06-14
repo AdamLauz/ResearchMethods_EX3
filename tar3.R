@@ -78,6 +78,8 @@ TukeyHSD(anovaModel, "Comp_Use_Know")
 #One-way anovas
 anovaModel_S <- aov(clarity ~ Comp_Use_Know, data = data_filtered[data_filtered$System == "S",])
 anovaModel_C <- aov(clarity ~ Comp_Use_Know, data = data_filtered[data_filtered$System == "C",])
+summary(anovaModel_S)
+summary(anovaModel_C)
 #t-tests
 Comp_Use_Know_F1 <- data_filtered[data_filtered$Comp_Use_Know == "F1",]
 var.test(Comp_Use_Know_F1$clarity, Comp_Use_Know_F1$System)
