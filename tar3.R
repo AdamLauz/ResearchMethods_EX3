@@ -23,31 +23,31 @@ data_filtered <- na.exclude(data_filtered)
 
 
 #-----------------------------Task 1------------------------------------
-satisfaction_s_group <- data_filtered[data_filtered$System == 'S', names(data_filtered) %in% 'satisfaction']
-satisfaction_c_group <- data_filtered[data_filtered$System == 'C', names(data_filtered) %in% 'satisfaction']
-satisfaction_males_group <- data_filtered[data_filtered$Sex == 'C1', names(data_filtered) %in% 'satisfaction']
-satisfaction_females_group <- data_filtered[data_filtered$Sex == 'C2', names(data_filtered) %in% 'satisfaction']
+politeness_s_group <- data_filtered[data_filtered$System == 'S', names(data_filtered) %in% 'politeness']
+politeness_c_group <- data_filtered[data_filtered$System == 'C', names(data_filtered) %in% 'politeness']
+politeness_males_group <- data_filtered[data_filtered$Sex == 'C1', names(data_filtered) %in% 'politeness']
+politeness_females_group <- data_filtered[data_filtered$Sex == 'C2', names(data_filtered) %in% 'politeness']
 
 #Normality test: H0: the population is normally distibuted
-shapiro.test(satisfaction_s_group) #p-value < 0.05 therefore the population is not normally distirbuted!
-shapiro.test(satisfaction_c_group) #p-value > 0.05 therefore the population is normally distirbuted
-shapiro.test(satisfaction_males_group) #p-value > 0.05 therefore the population is normally distirbuted
-shapiro.test(satisfaction_females_group) #p-value < 0.05 therefore the population is not normally distirbuted!
-qqnorm(satisfaction_s_group);qqline(satisfaction_s_group, col = 8)
-qqnorm(satisfaction_c_group);qqline(satisfaction_c_group, col = 8)
-hist(satisfaction_s_group, col="blue", breaks = 20, main = "System = S")
-hist(satisfaction_c_group, col="red", breaks = 20, main = "System = C")
-hist(satisfaction_males_group, col="green", breaks = 20, main = "Sex = Male")
-hist(satisfaction_females_group, col="yellow", breaks = 20, main = "Sex = Female")
+shapiro.test(politeness_s_group) #p-value < 0.05 therefore the population is not normally distirbuted!
+shapiro.test(politeness_c_group) #p-value > 0.05 therefore the population is normally distirbuted
+shapiro.test(politeness_males_group) #p-value < 0.05 therefore the population is not normally distirbuted
+shapiro.test(politeness_females_group) #p-value > 0.05 therefore the population is normally distirbuted!
+qqnorm(politeness_s_group);qqline(politeness_s_group, col = 8)
+qqnorm(politeness_c_group);qqline(politeness_c_group, col = 8)
+hist(politeness_s_group, col="blue", breaks = 20, main = "System = S")
+hist(politeness_c_group, col="red", breaks = 20, main = "System = C")
+hist(politeness_males_group, col="green", breaks = 20, main = "Sex = Male")
+hist(politeness_females_group, col="yellow", breaks = 20, main = "Sex = Female")
 #Perform variance test 
-var.test(satisfaction_s_group,satisfaction_c_group)
-var.test(satisfaction_males_group, satisfaction_females_group)
+var.test(politeness_s_group,politeness_c_group)
+var.test(politeness_males_group, politeness_females_group)
 
 #t-test 1: H0: Politeness(S) = Politeness(C). H1: Politeness(S) != Politeness(C)
-t.test(satisfaction_s_group, satisfaction_c_group, var.equal = FALSE)
+t.test(politeness_s_group, politeness_c_group, var.equal = TRUE)
 
 #t-test 2: H0: Politeness(males) = Politeness(females). H1: Politeness(males) != Politeness(females)
-t.test(satisfaction_males_group, satisfaction_females_group, var.equal = TRUE)
+t.test(politeness_males_group, politeness_females_group, var.equal = TRUE)
 
 #-----------------------------Task 2------------------------------------
 #Descriptive statistics
