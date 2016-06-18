@@ -28,7 +28,7 @@ politeness_c_group <- data_filtered[data_filtered$System == 'C', names(data_filt
 politeness_males_group <- data_filtered[data_filtered$Sex == 'C1', names(data_filtered) %in% 'politeness']
 politeness_females_group <- data_filtered[data_filtered$Sex == 'C2', names(data_filtered) %in% 'politeness']
 
-#Normality test: H0: the population is normally distibuted
+#Normality test: H0: the population is normally distibuted  ****NOT NEEDDED*****
 shapiro.test(politeness_s_group) #p-value < 0.05 therefore the population is not normally distirbuted!
 shapiro.test(politeness_c_group) #p-value > 0.05 therefore the population is normally distirbuted
 shapiro.test(politeness_males_group) #p-value < 0.05 therefore the population is not normally distirbuted
@@ -39,6 +39,7 @@ hist(politeness_s_group, col="blue", breaks = 20, main = "System = S")
 hist(politeness_c_group, col="red", breaks = 20, main = "System = C")
 hist(politeness_males_group, col="green", breaks = 20, main = "Sex = Male")
 hist(politeness_females_group, col="yellow", breaks = 20, main = "Sex = Female")
+
 #Perform variance test 
 var.test(politeness_s_group,politeness_c_group)
 var.test(politeness_males_group, politeness_females_group)
@@ -58,10 +59,9 @@ descrp_stats <- summaryBy(clarity ~ System + Comp_Use_Know + System*Comp_Use_Kno
 #Two-way anova model
 anovaModel <- aov(clarity ~ System + Comp_Use_Know + System*Comp_Use_Know, data = data_filtered)
 
-#Perform Levene's test where H0: we have a constant variance
-anovaModel.levene.data <- abs(anovaModel$residuals)
-anovaModel.levene <- aov(anovaModel.levene.data ~ data_filtered$clarity)
-summary(anovaModel.levene) # p-value is < 0.05 therefore we reject H0 -> need to lower the p-value in the anova-two-test to 0.01!
+#Perform Levene's test where H0 = we have an equal variance between groups
+library(s20x)
+levene.test(clarity ~ System + Comp_Use_Know, data_filtered) # p-value is < 0.05 therefore we reject H0 -> need to lower the p-value in the anova-two-test to 0.01!
 
 #Two-way anova summary
 summary(anovaModel) #System is strongly significent ***. the interaction System*Comp_use_know is also significent * -> THERE IS AN INTERACTION!!!
@@ -78,24 +78,26 @@ TukeyHSD(anovaModel, "Comp_Use_Know")
 #One-way anovas
 anovaModel_S <- aov(clarity ~ Comp_Use_Know, data = data_filtered[data_filtered$System == "S",])
 anovaModel_C <- aov(clarity ~ Comp_Use_Know, data = data_filtered[data_filtered$System == "C",])
+levene.test(clarity ~ Comp_Use_Know, data_filtered[data_filtered$System == "S",])
+levene.test(clarity ~ Comp_Use_Know, data_filtered[data_filtered$System == "C",])
 summary(anovaModel_S)
 summary(anovaModel_C)
 #t-tests
 Comp_Use_Know_F1 <- data_filtered[data_filtered$Comp_Use_Know == "F1",]
-var.test(Comp_Use_Know_F1$clarity, Comp_Use_Know_F1$System)
-t.test(clarity ~ System, data=Comp_Use_Know_F1, var.equal = FALSE)
+var.test(Comp_Use_Know_F1$clarity ~ Comp_Use_Know_F1$System)
+t.test(clarity ~ System, data=Comp_Use_Know_F1, var.equal = TRUE)
 
 Comp_Use_Know_F2 <- data_filtered[data_filtered$Comp_Use_Know == "F2",]
-var.test(Comp_Use_Know_F2$clarity, Comp_Use_Know_F2$System)
-t.test(clarity ~ System, data=Comp_Use_Know_F2, var.equal = FALSE)
+var.test(Comp_Use_Know_F2$clarity ~ Comp_Use_Know_F2$System)
+t.test(clarity ~ System, data=Comp_Use_Know_F2, var.equal = TRUE)
 
 Comp_Use_Know_F3 <- data_filtered[data_filtered$Comp_Use_Know == "F3",]
-var.test(Comp_Use_Know_F3$clarity, Comp_Use_Know_F3$System)
+var.test(Comp_Use_Know_F3$clarity ~ Comp_Use_Know_F3$System)
 t.test(clarity ~ System, data=Comp_Use_Know_F3, var.equal = FALSE)
 
 Comp_Use_Know_F4 <- data_filtered[data_filtered$Comp_Use_Know == "F4",]
-var.test(Comp_Use_Know_F4$clarity, Comp_Use_Know_F4$System)
-t.test(clarity ~ System, data=Comp_Use_Know_F4, var.equal = FALSE)
+var.test(Comp_Use_Know_F4$clarity ~ Comp_Use_Know_F4$System)
+t.test(clarity ~ System, data=Comp_Use_Know_F4, var.equal = TRUE)
 
 
 #Scheffe post-hoc test on Comp_Use_Know for System in {C,S}
